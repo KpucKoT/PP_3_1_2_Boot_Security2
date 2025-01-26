@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="">
+<head>
+    <meta charset="UTF-8">
+    <title>Создание</title>
+</head>
+<body>
+<h2>Создание нового пользователя</h2>
+<form th:method="POST"
+      th:action="@{/admin}"
+      th:object="${user}">
+    <div>
+        <label for="username">Введите имя: </label>
+        <input id="username" th:field="*{username}" type="text" autocomplete="username"/>
+        <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}" style="color:red;"></span>
+        <br/>
+        <label for="age">Введите возраст: </label>
+        <input id="age" th:field="*{age}" type="number" autocomplete="off"/>
+        <span th:if="${#fields.hasErrors('age')}" th:errors="*{age}" style="color:red;"></span>
+        <br/>
+
+        <label for="password">Введите пароль:</label>
+        <input id="password" th:field="*{password}" type="password" autocomplete="new-password"/>
+        <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color:red;"></span>
+        <br/>
+        <fieldset>
+            <legend>Роли</legend>
+            <label for=1>ROLE_ADMIN</label>
+            <input type="checkbox" id=1 name="roles" value=1 autocomplete="off">
+            <label for=2>ROLE_USER</label>
+            <input type="checkbox" id=2 name="roles" value=2 autocomplete="off">
+        </fieldset>
+    </div>
+    <div>
+        <input type="submit" value="Создать">
+    </div>
+
+    <div th:if="${param.error != null}">
+        <p style="color: red;">Error: <span th:text="${param.error[0]}"></span></p>
+    </div>
+
+
+</form>
+</body>
+</html>

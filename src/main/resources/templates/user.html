@@ -4,8 +4,42 @@
     <title>Spring Security Example</title>
 </head>
 <body>
-<h1>User, welcome spring boot security page!</h1>
 
+<h1>Добро пожаловать!</h1>
 
+<div>
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Имя</th>
+            <th>Возраст</th>
+        </tr>
+
+        <tr>
+            <td th:text="${user.getId()}"></td>
+            <td th:utext="${user.getUsername()}"></td>
+            <td th:utext="${user.getAge()}"></td>
+        </tr>
+
+    </table>
+
+    <tr>
+        <td> <a th:href="@{/admin/{id}/edit(id=${user.getId()})}" th:utext="Обновить"></a></td>
+    </tr>
+
+    <br>
+
+    <tr>
+        <td> <a th:href="@{/admin/{id}/delete(id=${user.getId()})}" th:utext="Удалить"></a></td>
+    </tr>
+
+    <br>
+
+    <tr>
+        <td> <a th:href="@{/admin}" th:utext="Вернуться"></a></td>
+    </tr>
+
+</div>
 </body>
 </html>
