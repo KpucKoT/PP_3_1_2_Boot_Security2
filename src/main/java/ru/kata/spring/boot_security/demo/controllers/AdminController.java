@@ -101,12 +101,11 @@ public class AdminController {
                              @RequestParam(value = "roles", required = false) Set<Integer> roles,
                              BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "new"; // Вернуть форму с ошибками
+            return "new"; 
         }
         try {
             adminServiceImpl.createUser(user, roles);
         } catch (RuntimeException e) {
-            // Обработка ошибок, например, вывод сообщения об ошибке на странице
             return "redirect:/admin/new?error=" + e.getMessage();
         }
         return "redirect:/admin";
