@@ -1,6 +1,7 @@
 package ru.kata.spring.boot_security.demo.configs;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -16,8 +17,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.filter.HiddenHttpMethodFilter;
 import ru.kata.spring.boot_security.demo.service.UserDetailsServiceImpl;
 
+import javax.servlet.Filter;
 import java.util.List;
 
 @Configuration
@@ -35,11 +38,20 @@ public class WebSecurityConfig {
     }
 
     @Bean
+    public FilterRegistrationBean<HiddenHttpMethodFilter> customHiddenHttpMethodFilter() {
+        FilterRegistrationBean<HiddenHttpMethodFilter> filterRegistrationBean = new FilterRegistrationBean<>();
+        HiddenHttpMethodFilter filter = new HiddenHttpMethodFilter();
+        filterRegistrationBean.setFilter(filter);
+        filterRegistrationBean.addUrlPatterns("/admin/*"); // Укажите URL-паттерны, где нужна поддержка PATCH
+        return filterRegistrationBean;
+    }
+
+    @Bean
     protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authenticationProvider(authenticationProvider())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/", "/index", "/login", "/error").permitAll()
+                        .requestMatchers("/", "/login", "/error").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/user").authenticated()
                         .anyRequest().authenticated())
@@ -61,6 +73,8 @@ public class WebSecurityConfig {
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {

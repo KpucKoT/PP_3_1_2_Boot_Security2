@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "users")
@@ -80,6 +81,15 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
+    public String getRolesString() {
+        if (roles == null || roles.isEmpty()) {
+            return "Нет ролей";
+        }
+        return roles.stream()
+                .map(Role::getName)
+                .collect(Collectors.joining(", "));
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles();
@@ -112,6 +122,7 @@ public class User implements UserDetails {
                 ", username='" + username + '\'' +
                 ", age=" + age +
                 ", password='" + password + '\'' +
+                ", roles=" + roles +
                 '}';
     }
 }
